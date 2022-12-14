@@ -1,0 +1,16 @@
+model {
+  y ~ dbin(ap,n)
+
+  ap <- tp*Se + (1-tp)*(1-Sp)
+  
+  # Uniform (non-informative) prior distribution 
+  tp ~ dbeta(1,1)
+  
+# Informative priors for Se and Sp
+  Se ~ dbeta(25.4, 3.4)
+  Sp ~ dbeta(95, 5)
+  
+  #data# n, y
+  #monitor# tp, Se, Sp
+  #inits# tp, Se, Sp
+  }

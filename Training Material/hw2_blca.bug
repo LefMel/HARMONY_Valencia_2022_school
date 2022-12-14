@@ -1,0 +1,28 @@
+model{
+  for(p in 1:Populations){
+    Cross_Classified [1:4, p] ~ dmulti(prob[1:4, p], TotalTests[p])
+  
+    # Test1- Test2-
+    prob[1,p] <- (prev[p] * ((1-se[1])*(1-se[2]))) + ((1-prev[p]) * ((sp[1])*(sp[2])))
+
+    # Test1+ Test2-
+    prob[2,p] <- (prev[p] * ((se[1])*(1-se[2]))) + ((1-prev[p]) * ((1-sp[1])*(sp[2])))
+
+    # Test1- Test2+
+    prob[3,p] <- (prev[p] * ((1-se[1])*(se[2]))) + ((1-prev[p]) * ((sp[1])*(1-sp[2])))
+
+    # Test1+ Test2+
+    prob[4,p] <- (prev[p] * ((se[1])*(se[2]))) + ((1-prev[p]) * ((1-sp[1])*(1-sp[2])))
+	  
+    prev[p] ~ dbeta(1, 1)
+  }
+se[1] ~ dbeta(1, 1)T(1-sp[1], )
+sp[1] ~ dbeta(1, 1)
+
+se[2] ~ dbeta(1, 1)T(1-sp[2], ) 
+sp[2] ~ dbeta(1, 1)
+  
+ #data# Cross_Classified, TotalTests, Populations
+ #monitor# prev, se, sp
+ #inits# prev, se, sp 
+}
